@@ -29,9 +29,6 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-  @IsInt()
-  age: number;
-
   @IsNotEmpty()
   @IsEnum(UserRoles, { message: 'Invalid role provided.' })
   roles: UserRoles;
