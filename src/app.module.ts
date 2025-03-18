@@ -19,12 +19,8 @@ import { JwtStrategy } from './auth/strategy/jwt.strategy';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: parseInt(process.env.DATABASE_PORT || '5432', 10),
-      password: String(process.env.DATABASE_PASSWORD),
-      username: process.env.DATABASE_USER,
+      url: process.env.DATABASE_URL,
       entities: [User, Post],
-      database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
     }),
