@@ -4,30 +4,22 @@ import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createPostDto: CreatePostDto): Promise<Post> {
-    const user = await this.userRepository.findOne({
-      where: { id: createPostDto.authorId },
-    });
-
-    if (!user) {
-      throw new NotFoundException('Author not found');
-    }
-
+  async create(
+    createPostDto: CreatePostDto,
+    authorId: number,
+  ): Promise<Post> {
     const post = this.postRepository.create({
       title: createPostDto.title,
       content: createPostDto.content,
-      author_id: user.id,
+      author_id: authorId,
     });
 
     return this.postRepository.save(post);
