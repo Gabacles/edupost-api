@@ -57,13 +57,18 @@ export class PostService {
     authorId: number,
     updatePostDto: UpdatePostDto,
   ): Promise<Post> {
-    const post = await this.postRepository.findOne({ where: { id } });
+    const post = await this.postRepository.findOne({
+      where: { id },
+      relations: ['author_id'],
+    });
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
 
-    if (post.author_id !== authorId) {
+    const { id: postAuthorId } = post.author_id as any;
+
+    if (postAuthorId !== authorId) {
       throw new NotFoundException('You are not the author of this post');
     }
 
