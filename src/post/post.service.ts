@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -22,8 +22,12 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  async findAll(): Promise<Post[]> {
-    return this.postRepository.find({ relations: ['author_id'] });
+  async findAll(limit = 10, page = 1): Promise<Post[]> {
+    return this.postRepository.find({
+      relations: ['author_id'],
+      take: limit,
+      skip: (page - 1) * limit,
+    });
   }
 
   async findOne(id: number): Promise<Post> {
@@ -37,6 +41,15 @@ export class PostService {
     }
 
     return post;
+  }
+
+  async search(query: string, limit = 10, page = 1): Promise<Post[]> {
+    return this.postRepository.find({
+      where: [{ title: ILike(`%${query}%`) }, { content: ILike(`%${query}%`) }],
+      relations: ['author_id'],
+      take: limit,
+      skip: (page - 1) * limit,
+    });
   }
 
   async update(
