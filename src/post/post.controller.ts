@@ -7,11 +7,13 @@ import {
   Delete,
   Get,
   Request,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { IPost } from './models/post.interface';
 
 @Controller('posts')
 export class PostController {
@@ -25,8 +27,20 @@ export class PostController {
   }
 
   @Get()
-  async findAllPosts() {
-    return this.postService.findAll();
+  async findAllPosts(
+    @Query('limit') limit: number,
+    @Query('page') page: number,
+  ) {
+    return this.postService.findAll(limit, page);
+  }
+
+  @Get('search')
+  async searchPosts(
+    @Query('query') query: string,
+    @Query('limit') limit?: number,
+    @Query('page') page?: number,
+  ): Promise<IPost[]> {
+    return this.postService.search(query, limit, page);
   }
 
   @Get(':id')
