@@ -26,13 +26,13 @@ export class PostService {
   }
 
   async findAll(): Promise<Post[]> {
-    return this.postRepository.find({ relations: ['author'] });
+    return this.postRepository.find({ relations: ['author_id'] });
   }
 
   async findOne(id: number): Promise<Post> {
     const post = await this.postRepository.findOne({
       where: { id },
-      relations: ['author'],
+      relations: ['author_id'],
     });
 
     if (!post) {
