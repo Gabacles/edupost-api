@@ -12,10 +12,7 @@ export class PostService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async create(
-    createPostDto: CreatePostDto,
-    authorId: number,
-  ): Promise<Post> {
+  async create(createPostDto: CreatePostDto, authorId: number): Promise<Post> {
     const post = this.postRepository.create({
       title: createPostDto.title,
       content: createPostDto.content,
@@ -42,15 +39,22 @@ export class PostService {
     return post;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
-    const post = await this.postRepository.preload({
-      id,
-      ...updatePostDto,
-    });
+  async update(
+    id: number,
+    authorId: number,
+    updatePostDto: UpdatePostDto,
+  ): Promise<Post> {
+    const post = await this.postRepository.findOne({ where: { id } });
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
+
+    if (post.author_id !== authorId) {
+      throw new NotFoundException('You are not the author of this post');
+    }
+
+    Object.assign(post, updatePostDto);
 
     return this.postRepository.save(post);
   }

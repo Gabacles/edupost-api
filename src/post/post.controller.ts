@@ -37,12 +37,12 @@ export class PostController {
   @Roles('TEACHER')
   @Put(':id')
   async updatePost(
-    @Param('id') id: number,
+    @Param('id') postId: number,
     @Body() updatePostDto: UpdatePostDto,
     @Request() req: any,
   ) {
     const authorId = req.user.id;
-    return this.postService.update(id, updatePostDto);
+    return this.postService.update(postId, authorId, updatePostDto);
   }
 
   @Roles('TEACHER')
