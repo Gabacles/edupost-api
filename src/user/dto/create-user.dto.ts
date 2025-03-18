@@ -2,7 +2,6 @@ import {
   IsAlphanumeric,
   IsEmail,
   IsEnum,
-  IsInt,
   IsNotEmpty,
   IsString,
   Matches,
@@ -28,9 +27,6 @@ export class CreateUserDto {
   @IsString()
   @IsEmail()
   email: string;
-
-  @IsInt()
-  age: number;
 
   @IsNotEmpty()
   @IsEnum(UserRoles, { message: 'Invalid role provided.' })
