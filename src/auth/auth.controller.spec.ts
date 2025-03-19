@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { BadRequestException } from '@nestjs/common';
+import { UserRoles } from '@/user/models/userRoles.enum';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -62,7 +63,13 @@ describe('AuthController', () => {
 
   describe('register', () => {
     it('should return a register response', async () => {
-      const mockRegisterBody = { username: 'newUser', password: 'newPassword' };
+      const mockRegisterBody = {
+        username: 'newUser',
+        password: 'newPassword',
+        name: 'newName',
+        email: 'test@email.com',
+        roles: UserRoles.TEACHER,
+      };
       const mockRegisterResponse = { id: 1, username: 'newUser' };
 
       mockAuthService.register.mockResolvedValue(mockRegisterResponse);
@@ -74,8 +81,11 @@ describe('AuthController', () => {
 
     it('should return BadRequestException if registration fails', async () => {
       const mockRegisterBody = {
-        username: 'existingUser',
-        password: 'existingPassword',
+        username: 'newUser',
+        password: 'newPassword',
+        name: 'newName',
+        email: 'test@email.com',
+        roles: UserRoles.TEACHER,
       };
 
       mockAuthService.register.mockRejectedValue(
