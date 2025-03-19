@@ -19,7 +19,21 @@ import { JwtStrategy } from './auth/strategy/jwt.strategy';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT || '24264', 10),
+      database: process.env.DATABASE_NAME,
+      ssl: {
+        rejectUnauthorized: true,
+        ca: process.env.CA_CERTIFICATE_BASE64
+          ? Buffer.from(process.env.CA_CERTIFICATE_BASE64, 'base64').toString(
+              'utf-8',
+            )
+          : (() => {
+              throw new Error('CA_CERTIFICATE_BASE64 is not defined');
+            })(),
+      },
       entities: [User, Post],
       synchronize: true,
       logging: true,
