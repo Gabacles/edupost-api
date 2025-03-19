@@ -12,7 +12,7 @@ import {
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { IPost } from './models/post.interface';
 
 @Controller('posts')

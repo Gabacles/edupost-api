@@ -1,8 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IUser } from '../models/user.interface';
 import { UserRoles } from '../models/userRoles.enum';
-import { IPost } from 'src/post/models/post.interface';
-import { Post } from 'src/post/entities/post.entity';
+import { Post } from '@/post/entities/post.entity';
 
 @Entity()
 export class User implements IUser {

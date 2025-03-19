@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { IPost } from '../models/post.interface';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '@/user/entities/user.entity';
 
 @Entity()
 export class Post implements IPost {
