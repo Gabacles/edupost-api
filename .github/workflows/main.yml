@@ -27,5 +27,6 @@ jobs:
             --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
             --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
             --build-arg CA_CERTIFICATE_BASE64=${{ secrets.CA_CERTIFICATE_BASE64 }} \
-            --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} .
+            --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --build-arg JWT_EXPIRATION_TIME=${{ secrets.JWT_EXPIRATION_TIME }} .
           docker push $DOCKER_USERNAME/edupost:latest
