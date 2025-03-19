@@ -51,8 +51,6 @@ export class JwtGuard extends AuthGuard('jwt') {
         context.getHandler(),
       );
 
-      console.log('requiredRole', requiredRole);
-
       if (requiredRole) {
         const userRole = decodedToken.roles;
 

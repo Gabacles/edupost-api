@@ -7,8 +7,6 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-console.log('process.env.JWT_SECRET', process.env.JWT_SECRET);
-
 @Module({
   imports: [
     JwtModule.registerAsync({
