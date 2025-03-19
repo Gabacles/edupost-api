@@ -27,6 +27,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.0.7",
     "@nestjs/typeorm": "^11.0.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
@@ -87,6 +88,8 @@
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1"
     },
-    "modulePaths": ["<rootDir>/src"]
+    "modulePaths": [
+      "<rootDir>/src"
+    ]
   }
 }
