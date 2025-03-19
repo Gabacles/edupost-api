@@ -24,16 +24,16 @@ import { JwtStrategy } from './auth/strategy/jwt.strategy';
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT || '24264', 10),
       database: process.env.DATABASE_NAME,
-      ssl: {
-        rejectUnauthorized: true,
-        ca: process.env.CA_CERTIFICATE_BASE64
-          ? Buffer.from(process.env.CA_CERTIFICATE_BASE64, 'base64').toString(
-              'utf-8',
-            )
-          : (() => {
-              throw new Error('CA_CERTIFICATE_BASE64 is not defined');
-            })(),
-      },
+      ...(process.env.CA_CERTIFICATE_BASE64
+        ? {
+            ssl: {
+              ca: Buffer.from(
+                process.env.CA_CERTIFICATE_BASE64,
+                'base64',
+              ).toString('utf-8'),
+            },
+          }
+        : {}),
       entities: [User, Post],
       synchronize: true,
       logging: true,
