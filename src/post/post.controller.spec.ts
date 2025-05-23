@@ -54,9 +54,9 @@ describe('PostController', () => {
       const mockPosts = [{ id: 1, title: 'Test Post', content: 'Test content' }];
       mockPostService.findAll.mockResolvedValue(mockPosts);
 
-      const result = await controller.findAllPosts(10, 1);
+      const result = await controller.findAllPosts(10, 1, "test", 1);
       expect(result).toBe(mockPosts);
-      expect(mockPostService.findAll).toHaveBeenCalledWith(10, 1);
+      expect(mockPostService.findAll).toHaveBeenCalledWith(10, 1, "test", 1);
     });
   });
 
