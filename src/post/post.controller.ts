@@ -38,8 +38,10 @@ export class PostController {
   async findAllPosts(
     @Query('limit') limit: number,
     @Query('page') page: number,
+    @Query('search') search: string,
+    @Query('authorId') authorId: number,
   ) {
-    return this.postService.findAll(limit, page);
+    return this.postService.findAll(limit, page, search, authorId);
   }
 
   @Get('search')
@@ -56,6 +58,12 @@ export class PostController {
   @ApiOperation({ summary: 'Find post by id' })
   async viewPost(@Param('id') id: number) {
     return this.postService.findOne(id);
+  }
+
+  @Get('author/:id')
+  @ApiOperation({ summary: 'Find posts by author id' })
+  async findPostsByAuthorId(@Param('id') authorId: number) {
+    return this.postService.findByAuthorId(authorId);
   }
 
   @Roles('TEACHER')

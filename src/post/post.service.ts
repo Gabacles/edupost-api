@@ -16,18 +16,61 @@ export class PostService {
     const post = this.postRepository.create({
       title: createPostDto.title,
       content: createPostDto.content,
-      author_id: authorId,
+      author_id: { id: authorId },
     });
 
     return this.postRepository.save(post);
   }
 
-  async findAll(limit = 10, page = 1): Promise<Post[]> {
-    return this.postRepository.find({
+  async findAll(
+    limit = 10,
+    page = 1,
+    search?: string,
+    authorId?: number,
+  ): Promise<{
+    data: Post[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  }> {
+    let where: any;
+
+    if (search) {
+      where = [
+        {
+          title: ILike(`%${search}%`),
+          ...(authorId && { author_id: { id: authorId } }),
+        },
+        {
+          content: ILike(`%${search}%`),
+          ...(authorId && { author_id: { id: authorId } }),
+        },
+      ];
+    } else if (authorId) {
+      where = {
+        author_id: { id: authorId },
+      };
+    } else {
+      where = {};
+    }
+
+    const [data, totalItems] = await this.postRepository.findAndCount({
+      where,
       relations: ['author_id'],
       take: limit,
       skip: (page - 1) * limit,
     });
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      data,
+      totalItems,
+      totalPages,
+      currentPage: Number(page),
+      pageSize: Number(limit),
+    };
   }
 
   async findOne(id: number): Promise<Post> {
@@ -41,6 +84,20 @@ export class PostService {
     }
 
     return post;
+  }
+
+  async findByAuthorId(authorId: number): Promise<Post[]> {
+    const posts = await this.postRepository.find({
+      where: {
+        author_id: { id: authorId },
+      },
+      relations: ['author_id'],
+    });
+
+    if (!posts || posts.length === 0) {
+      throw new NotFoundException('No posts found for this author');
+    }
+    return posts;
   }
 
   async search(query: string, limit = 10, page = 1): Promise<Post[]> {

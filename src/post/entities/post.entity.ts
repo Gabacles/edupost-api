@@ -23,7 +23,7 @@ export class Post implements IPost {
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'author_id' })
-  author_id: number;
+  author_id: User;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
