@@ -15,6 +15,7 @@ describe('PostService', () => {
     find: jest.fn(),
     findOne: jest.fn(),
     delete: jest.fn(),
+    findAndCount: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -55,17 +56,27 @@ describe('PostService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of posts', async () => {
+    it('should return paginated posts with metadata', async () => {
       const mockPosts = [
         { id: 1, title: 'Post 1', content: 'Content 1' },
         { id: 2, title: 'Post 2', content: 'Content 2' },
       ];
+      const mockTotal = 20;
 
-      mockPostRepository.find.mockResolvedValue(mockPosts);
+      mockPostRepository.findAndCount.mockResolvedValue([mockPosts, mockTotal]);
 
       const result = await service.findAll(10, 1);
-      expect(result).toEqual(mockPosts);
-      expect(mockPostRepository.find).toHaveBeenCalledWith({
+
+      expect(result).toEqual({
+        data: mockPosts,
+        totalItems: mockTotal,
+        totalPages: 2,
+        currentPage: 1,
+        pageSize: 10,
+      });
+
+      expect(mockPostRepository.findAndCount).toHaveBeenCalledWith({
+        where: {},
         relations: ['author_id'],
         take: 10,
         skip: 0,
